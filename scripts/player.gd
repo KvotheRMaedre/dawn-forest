@@ -10,6 +10,7 @@ class_name Player
 @export var wall_gravity : int
 
 @onready var wall_ray: RayCast2D = $WallRay
+@onready var stats: PlayerStats = $Stats
 
 var direction : int = 1
 var jump_count : int = 0
@@ -19,6 +20,8 @@ var is_attacking : bool = false
 var is_defending : bool = false
 var is_crouching : bool = false
 var can_track_input : bool = true
+var on_hit : bool = false
+var dead : bool = false
 
 func _physics_process(delta: float) -> void:
 	horizontal_movement_env()
@@ -71,18 +74,22 @@ func attack() -> void:
 func crouch() -> void:
 	if Input.is_action_pressed("crouch") && is_on_floor() && !is_defending:
 		is_crouching = true
+		stats.shielding = false
 		can_track_input = false
 	elif !is_defending:
 		is_crouching = false
 		can_track_input = true
+		stats.shielding = false
 		player_texture.is_crouch_off = true
 
 func defend() -> void:
 	if Input.is_action_pressed("defense") && is_on_floor() && !is_crouching:
 		is_defending = true
 		can_track_input = false
+		stats.shielding = true
 	elif !is_crouching:
 		is_defending = false
+		stats.shielding = false
 		can_track_input = true
 		player_texture.is_shield_off = true
 

@@ -1,6 +1,8 @@
 extends Node
 class_name PlayerStats
 
+@export var player: Player
+
 var shielding : bool = false
 var base_health : int = 15
 var base_mana : int = 10
@@ -62,15 +64,15 @@ func update_health(type : String, value : int) -> void:
 		"Decrease":
 			verify_shield(value)
 			if current_health <= 0:
-				print("WASTED!")
+				player.dead = true
 			else:
-				print("Damage")
+				player.on_hit = true
+				player.is_attacking = false
 
 func verify_shield(value : int) -> void:
 	if shielding:
 		if (base_defense + bonus_defense) > value:
 			return
-		
 		var damage = abs((base_defense + bonus_defense) - value)
 		current_health -= damage
 	else:
@@ -84,3 +86,7 @@ func update_mana(type : String, value : int) -> void:
 				current_mana = max_mana
 		"Decrease":
 			current_mana -= value
+
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("ui_cancel"):
+		update_health("Decrease", 5)

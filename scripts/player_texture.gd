@@ -5,6 +5,7 @@ class_name PlayerTexture
 @export var animation : AnimationPlayer
 
 @onready var wall_ray: RayCast2D = $"../WallRay"
+@onready var attack_collision: CollisionShape2D = $"../AttackArea/Collision"
 
 var normal_attack : bool = false
 var suffix : String = "_right"
@@ -13,7 +14,9 @@ var is_crouch_off : bool = false
 
 func animate(direction : Vector2) -> void:
 	verify_position(direction)
-	if player.is_attacking || player.is_defending || player.is_crouching || player.is_sliding:
+	if player.dead || player.on_hit:
+		hit_behavior()
+	elif player.is_attacking || player.is_defending || player.is_crouching || player.is_sliding:
 		action_behavior()
 	elif direction.y != 0:
 		vertical_behavior(direction)
@@ -35,6 +38,14 @@ func verify_position(direction : Vector2) -> void:
 		flip_h = true
 		suffix = "_left"
 		player.direction = 1
+
+func hit_behavior() -> void:
+	player.set_physics_process(false)
+	attack_collision.set_deferred("disabled", true)
+	if player.dead:
+		animation.play("death")
+	elif player.on_hit:
+		animation.play("hit")
 
 func action_behavior() -> void:
 	if player.next_to_wall():
@@ -73,3 +84,12 @@ func _on_animation_animation_finished(anim_name: StringName) -> void:
 		"attack_right":
 			normal_attack = false
 			player.is_attacking = false
+		"hit":
+			player.on_hit = false
+			player.set_physics_process(true)
+			
+			if player.is_defending:
+				animation.play("shield")
+				
+			if player.is_crouching:
+				animation.play("crouch")
