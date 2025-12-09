@@ -4,6 +4,8 @@ class_name PlayerTexture
 @export var player: CharacterBody2D
 @export var animation : AnimationPlayer
 
+@onready var wall_ray: RayCast2D = $"../WallRay"
+
 var normal_attack : bool = false
 var suffix : String = "_right"
 var is_shield_off : bool = false
@@ -11,7 +13,7 @@ var is_crouch_off : bool = false
 
 func animate(direction : Vector2) -> void:
 	verify_position(direction)
-	if player.is_attacking || player.is_defending || player.is_crouching:
+	if player.is_attacking || player.is_defending || player.is_crouching || player.is_sliding:
 		action_behavior()
 	elif direction.y != 0:
 		vertical_behavior(direction)
@@ -26,12 +28,18 @@ func verify_position(direction : Vector2) -> void:
 	if direction.x > 0:
 		flip_h = false
 		suffix = "_right"
+		wall_ray.rotation_degrees = 0
+		player.direction = -1
 	elif direction.x < 0:
+		wall_ray.rotation_degrees = 180
 		flip_h = true
 		suffix = "_left"
+		player.direction = 1
 
 func action_behavior() -> void:
-	if player.is_attacking && normal_attack:
+	if player.next_to_wall():
+		animation.play("wall_slide")
+	elif player.is_attacking && normal_attack:
 		animation.play("attack" + suffix)
 	elif player.is_defending and is_shield_off:
 		animation.play("shield")
@@ -39,6 +47,7 @@ func action_behavior() -> void:
 	elif player.is_crouching and is_crouch_off:
 		animation.play("crouch")
 		is_crouch_off = false
+	
 
 func horizontal_behavior(direction : Vector2) -> void:
 	if direction.x != 0:

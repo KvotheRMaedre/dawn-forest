@@ -1,10 +1,18 @@
-[gd_scene load_steps=6 format=4 uid="uid://b0xt20n3w6my4"]
+[gd_scene load_steps=8 format=4 uid="uid://b0xt20n3w6my4"]
 
 [ext_resource type="TileSet" uid="uid://djahl614jdtkl" path="res://resources/floor_decor.tres" id="1_w8frs"]
+[ext_resource type="Texture2D" uid="uid://ha0yekwbg7tg" path="res://assets/effect/light.png" id="2_2r41h"]
 [ext_resource type="TileSet" uid="uid://c6eemqghcmgor" path="res://resources/grass.tres" id="2_mx8sn"]
 [ext_resource type="PackedScene" uid="uid://dg3nwyjormxwo" path="res://scenes/background.tscn" id="3_ppgk2"]
 [ext_resource type="PackedScene" uid="uid://8wy2qx4g5krd" path="res://scenes/mask.tscn" id="4_mx8sn"]
 [ext_resource type="PackedScene" uid="uid://cft28n5ogab0t" path="res://scenes/player.tscn" id="5_ppgk2"]
+
+[sub_resource type="Environment" id="Environment_2r41h"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 1.0
+glow_strength = 2.0
+glow_hdr_threshold = 0.4
 
 [node name="Level" type="Node2D"]
 
@@ -26,6 +34,43 @@ texture_filter = 1
 tile_map_data = PackedByteArray("AAARAAUABgAAAAAAAAARAAsABgAAAAAAAAAJAAkABgAAAAAAAAADAAQABgAAAAAAAAAIAAQABgAAAAAAAAA=")
 tile_set = ExtResource("1_w8frs")
 
+[node name="LampLight" type="Node2D" parent="LevelDesign/Lamp"]
+
+[node name="Lamp1" type="PointLight2D" parent="LevelDesign/Lamp/LampLight"]
+position = Vector2(106, 125.00001)
+scale = Vector2(1, 1.515625)
+energy = 0.8
+texture = ExtResource("2_2r41h")
+texture_scale = 0.2
+
+[node name="Lamp2" type="PointLight2D" parent="LevelDesign/Lamp/LampLight"]
+position = Vector2(265, 125)
+scale = Vector2(1, 1.515625)
+energy = 0.8
+texture = ExtResource("2_2r41h")
+texture_scale = 0.2
+
+[node name="Lamp3" type="PointLight2D" parent="LevelDesign/Lamp/LampLight"]
+position = Vector2(553, 158)
+scale = Vector2(1, 1.515625)
+energy = 0.8
+texture = ExtResource("2_2r41h")
+texture_scale = 0.2
+
+[node name="Lamp4" type="PointLight2D" parent="LevelDesign/Lamp/LampLight"]
+position = Vector2(554, 350)
+scale = Vector2(1, 1.515625)
+energy = 0.8
+texture = ExtResource("2_2r41h")
+texture_scale = 0.2
+
+[node name="Lamp5" type="PointLight2D" parent="LevelDesign/Lamp/LampLight"]
+position = Vector2(298, 285)
+scale = Vector2(1, 1.515625)
+energy = 0.8
+texture = ExtResource("2_2r41h")
+texture_scale = 0.2
+
 [node name="SmallDecor" type="TileMapLayer" parent="LevelDesign"]
 texture_filter = 1
 tile_map_data = PackedByteArray("AAAmABcAAQAAAAAAAAAjABcAAQAAAAAAAAAkABcAAQAAAAAAAAAeABcAAQAAAAAAAAAdABcAAgAAAAAAAAAcABcAAgAAAAAAAAAfABcAAQAAAAAAAAASABMAAQAAAAAAAAAKABMAAQAAAAAAAAAHABMAAQAAAAAAAAACABMAAQAAAAAAAAAeAAsAAQAAAAAAAAAfAAsAAQAAAAAAAAAhAAsAAQAAAAAAAAALAAkAAQAAAAAAAAAKAAkAAQAAAAAAAAANAAkAAQAAAAAAAAATAAkAAQAAAAAAAAACAAkAAQAAAAAAAAADAAkAAQAAAAAAAAA=")
@@ -34,6 +79,10 @@ tile_set = ExtResource("2_mx8sn")
 [node name="Background" parent="." instance=ExtResource("3_ppgk2")]
 
 [node name="Mask" parent="." instance=ExtResource("4_mx8sn")]
+color = Color(0.14406255, 0.14406255, 0.14406255, 1)
 
 [node name="Player" parent="." instance=ExtResource("5_ppgk2")]
-position = Vector2(71, 132)
+position = Vector2(119, 289)
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_2r41h")
