@@ -1,6 +1,8 @@
 extends Sprite2D
 class_name PlayerTexture
 
+signal game_over
+
 @export var player: CharacterBody2D
 @export var animation : AnimationPlayer
 
@@ -93,3 +95,5 @@ func _on_animation_animation_finished(anim_name: StringName) -> void:
 				
 			if player.is_crouching:
 				animation.play("crouch")
+		"death":
+			emit_signal("game_over")

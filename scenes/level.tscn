@@ -1,5 +1,6 @@
-[gd_scene load_steps=8 format=4 uid="uid://b0xt20n3w6my4"]
+[gd_scene load_steps=9 format=4 uid="uid://b0xt20n3w6my4"]
 
+[ext_resource type="Script" uid="uid://cipjkmu15qnfg" path="res://scripts/level.gd" id="1_klq6b"]
 [ext_resource type="TileSet" uid="uid://djahl614jdtkl" path="res://resources/floor_decor.tres" id="1_w8frs"]
 [ext_resource type="Texture2D" uid="uid://ha0yekwbg7tg" path="res://assets/effect/light.png" id="2_2r41h"]
 [ext_resource type="TileSet" uid="uid://c6eemqghcmgor" path="res://resources/grass.tres" id="2_mx8sn"]
@@ -14,7 +15,9 @@ glow_intensity = 1.0
 glow_strength = 2.0
 glow_hdr_threshold = 0.4
 
-[node name="Level" type="Node2D"]
+[node name="Level" type="Node2D" node_paths=PackedStringArray("player")]
+script = ExtResource("1_klq6b")
+player = NodePath("Player")
 
 [node name="LevelDesign" type="Node2D" parent="."]
 
